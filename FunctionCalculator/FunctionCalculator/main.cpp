@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Postfixate.h"
+#include "Expression.h"
 
 int main() 
 {
@@ -7,6 +8,7 @@ int main()
 
 	cin >> infix;
 	postfix = convertPostfixed(infix);
-	cout << postfix;
+	
+	Expression* exp = new Expression(postfix);
 	return 0;
 }

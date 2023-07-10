@@ -15,10 +15,8 @@ string convertPostfixed(string infix) {
 	}
 	while (!s.empty()) {
 		postfix += s.top();
-		postfix += " ";
 		s.pop();
 	}
-	postfix.erase(postfix.size() - 1);
 	return postfix;
 }
 
@@ -31,7 +29,6 @@ void AddOperator(string& postfix, string& infix, int& i, stack<char>& s, map<cha
 	if (infix[i] == ')') {
 		while (s.top() != '(') {
 			postfix += s.top();
-			postfix += " ";
 			s.pop();
 		}
 		s.pop();
@@ -40,7 +37,6 @@ void AddOperator(string& postfix, string& infix, int& i, stack<char>& s, map<cha
 
 	while (s.size() != 0 && priority[infix[i]] <= priority[s.top()]) {
 		postfix += s.top();
-		postfix += " ";
 		s.pop();
 	}
 	s.push(infix[i]);
@@ -51,6 +47,5 @@ void AddOperand(string& postfix, string& infix, int& i, stack<char>& s, string& 
 		postfix += infix[i];
 		i++;
 	}
-	postfix += " ";
 	i--;
 }
