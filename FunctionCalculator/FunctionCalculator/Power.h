@@ -1,10 +1,20 @@
 #pragma once
-#include "Operator.h"
+#include "Operand.h"
 
-class Power : public Operator {
+
+class Power : public Operand {
 public:
-	Power(string s) : Operator(s) {}
+	Power() : Operand() {}
+	Power(Power& cp) : Operand(cp) {}
+	Power(Power&& mv) noexcept : Operand(mv) {}
 	~Power() {}
 
-	void Derivative() {}
+	Operand* Derivative() override;
+	int GetPriority() override { return 2; }
+	Operand* Clone() override {
+		Power* returnTree = new Power;
+		returnTree->SetLeft(this->left->Clone());
+		returnTree->SetRight(this->right->Clone());
+		return returnTree;
+	}
 };

@@ -1,10 +1,19 @@
 #pragma once
-#include "Operator.h"
+#include "Operand.h"
 
-class Multiply : public Operator {
+class Multiply : public Operand {
 public:
-	Multiply(string s) : Operator(s) {}
+	Multiply() : Operand() {}
+	Multiply(Multiply& cp) : Operand(cp) {}
+	Multiply(Multiply&& mv) noexcept : Operand(mv) {}
 	~Multiply() {}
 
-	void Derivative() {}
+	Operand* Derivative() override;
+	int GetPriority() override { return 1; }
+	Operand* Clone() override {
+		Multiply* returnTree = new Multiply;
+		returnTree->SetLeft(this->left->Clone());
+		returnTree->SetRight(this->right->Clone());
+		return returnTree;
+	}
 };

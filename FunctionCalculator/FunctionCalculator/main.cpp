@@ -1,14 +1,13 @@
-#include <iostream>
-#include "Postfixate.h"
 #include "Expression.h"
 
 int main() 
 {
-	string infix, postfix;
+	Expression* func = new Expression;
 
-	cin >> infix;
-	postfix = convertPostfixed(infix);
-	
-	Expression* exp = new Expression(postfix);
+	cin >> *func;
+	Expression* deriv = new Expression;
+	deriv->SetTree(func->GetTree()->Derivative());
+	cout << *deriv;
+
 	return 0;
 }

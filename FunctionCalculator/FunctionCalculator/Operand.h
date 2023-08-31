@@ -1,21 +1,49 @@
 #pragma once
 #include <string>
 
+class Expression;
+
 using namespace std;
 
 class Operand {
 protected:
-	string* info;
+	Operand* left, * right;
 public:
-	Operand(string& token) {
-		info = new string;
-		*info = token;
+	Operand() {
+		left = right = NULL;
+	}
+	Operand(Operand& cp) {
+		if (left != NULL) delete left;
+		if (right != NULL) delete right;
+		left = cp.GetLeft()->Clone();
+		right = cp.GetRight()->Clone();
+	}
+	Operand(Operand&& mv) noexcept {
+		if (left != NULL) delete left;
+		if (right != NULL) delete right;
+		left = mv.left;
+		right = mv.right;
+
+		mv.left = mv.right = NULL;
 	}
 	~Operand() {
-		info->clear();
-		delete info;
+		if (left!= NULL) delete left;
+		if (right != NULL) delete right;
 	}
 
-	char GetInfo() { return info->at(0); }
-	virtual void Derivative() = 0;
+	void SetLeft(Operand* op) {
+		if (left != NULL) delete left;
+		left = op;
+	}
+
+	void SetRight(Operand* op) {
+		if (right != NULL) delete right;
+		right = op;
+	}
+
+	Operand* GetLeft() { return left; }
+	Operand* GetRight() { return right; }
+	virtual Operand* Derivative() = 0;
+	virtual int GetPriority() = 0;
+	virtual Operand* Clone() = 0;
 };
