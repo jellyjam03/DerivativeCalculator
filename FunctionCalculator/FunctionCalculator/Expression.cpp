@@ -15,13 +15,15 @@
 string* Number::e = new string("e");
 string* Number::pi = new string ("pi");
 
+bool isSingleMinus(Operand* obj);
+
 Expression::Expression() {
 	tree = NULL;
 	expression = NULL; //postfixed = NULL;
 }
 
 Expression::~Expression() {
-	memset(expression, NULL, expression->size());
+	//memset(expression, 0, expression->size());
 	//memset(postfixed, NULL, postfixed->size());
 	delete expression;
 	//delete postfixed;
@@ -32,7 +34,7 @@ Operand* Expression::GetTree() { return tree; }
 
 void Expression::SetTree(Operand* toSet) {
 	if (tree != NULL) delete tree;
-	tree = toSet;
+	tree = toSet->Simplify();
 	//trebuie updatata si expresia printr-o parcurgere inordine a arborelui
 	if (expression != NULL) delete expression;
 	expression = InorderDFS(tree);
@@ -63,7 +65,7 @@ string* Expression::InorderDFS(Operand* tree) {
 
 
 	if (tree->GetLeft() != NULL)
-		if (tree->GetLeft()->GetPriority() < tree->GetPriority())
+		if (tree->GetLeft()->GetPriority() < tree->GetPriority() || isSingleMinus(tree->GetLeft()))
 			*returnString = *returnString + "(" + *left + ")";
 		else
 			*returnString = *returnString + *left;
@@ -73,7 +75,8 @@ string* Expression::InorderDFS(Operand* tree) {
 		if (tree->GetRight()->GetPriority() < tree->GetPriority() || 
 			dynamic_cast<Minus*>(tree) != NULL && tree->GetRight()->GetPriority() == tree->GetPriority() || 
 			tree->GetPriority() == 11 ||
-			dynamic_cast<Divide*>(tree) != NULL && tree->GetRight()->GetPriority() == tree->GetPriority())
+			dynamic_cast<Divide*>(tree) != NULL && tree->GetRight()->GetPriority() == tree->GetPriority() ||
+			isSingleMinus(tree->GetRight()))
 			*returnString = *returnString + "(" + *right + ")";
 		else
 			*returnString = *returnString + *right;
@@ -154,6 +157,11 @@ void Expression::Initialize(string* str) {
 	string* postfixed;
 	postfixed = convertPostfixed(*str);
 	tree = DepthFirstTreeInit(*postfixed);
+	Operand* aux = tree->Simplify();
+	delete tree;
+	tree = aux;
+	delete expression;
+	expression = InorderDFS(tree);
 }
 
 istream& operator>>(istream& input, Expression& obj) {
@@ -248,4 +256,8 @@ Operand* Expression::DepthFirstTreeInit(string& s) {
 		left = new Expression(s);
 	}*/
 	return returnTree;
+}
+
+bool isSingleMinus(Operand* obj) {
+	return dynamic_cast<Minus*>(obj) != NULL && obj->GetLeft() == NULL;
 }

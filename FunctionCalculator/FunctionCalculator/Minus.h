@@ -8,21 +8,13 @@ public:
 	Minus(Minus&& mv) noexcept : Operand(mv) {}
 	~Minus() {}
 	
-	Operand* Derivative() override {
-		Minus* returnTree = new Minus;
-		if (this->left != NULL)
-			returnTree->SetLeft(this->left->Derivative());
-		else
-			returnTree->SetLeft(NULL);
-		returnTree->SetRight(this->right->Derivative());
-
-		return returnTree;
-	}
+	Operand* Derivative() override;
 	int GetPriority() override { return 0; }
 	Operand* Clone() override {
 		Minus* returnTree = new Minus;
-		returnTree->SetLeft(this->left->Clone());
+		if (this->left != NULL) returnTree->SetLeft(this->left->Clone());
 		returnTree->SetRight(this->right->Clone());
 		return returnTree;
 	}
+	Operand* Simplify() override;
 };

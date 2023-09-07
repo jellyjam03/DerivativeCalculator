@@ -1,6 +1,5 @@
 #pragma once
 #include "Operand.h"
-#include "Number.h"
 
 class Variable : public Operand {
 public:
@@ -15,4 +14,5 @@ public:
 		Variable* returnTree = new Variable;
 		return returnTree;
 	}
+	Operand* Simplify() override;
 };

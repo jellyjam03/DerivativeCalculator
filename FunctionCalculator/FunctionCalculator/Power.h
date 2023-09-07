@@ -17,4 +17,5 @@ public:
 		returnTree->SetRight(this->right->Clone());
 		return returnTree;
 	}
+	Operand* Simplify() override;
 };

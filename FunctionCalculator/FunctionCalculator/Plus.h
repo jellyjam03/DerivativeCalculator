@@ -8,12 +8,7 @@ public:
 	Plus(Plus&& mv) noexcept : Operand(mv) {}
 	~Plus() {}
 	
-	Operand* Derivative() override {
-		Plus* returnTree = new Plus;
-		returnTree->SetLeft(left->Derivative());
-		returnTree->SetRight(right->Derivative());
-		return returnTree;
-	}
+	Operand* Derivative() override;
 	int GetPriority() override { return 0; }
 	Operand* Clone() override {
 		Plus* returnTree = new Plus;
@@ -21,4 +16,5 @@ public:
 		returnTree->SetRight(this->right->Clone());
 		return returnTree;
 	}
+	Operand* Simplify() override;
 };

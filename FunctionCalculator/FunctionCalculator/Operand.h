@@ -46,4 +46,5 @@ public:
 	virtual Operand* Derivative() = 0;
 	virtual int GetPriority() = 0;
 	virtual Operand* Clone() = 0;
+	virtual Operand* Simplify() = 0;
 };

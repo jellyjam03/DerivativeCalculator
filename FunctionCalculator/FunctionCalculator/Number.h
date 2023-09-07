@@ -14,13 +14,11 @@ public:
 
 	string& GetNumber() { return *number; }
 
-	Operand* Derivative() override {
-		Number* returnTree = new Number("0");
-		return returnTree;
-	}
+	Operand* Derivative() override;
 	int GetPriority() override { return 10; }
 	Operand* Clone() override {
 		Number* returnTree = new Number(this->GetNumber());
 		return returnTree;
 	}
+	Operand* Simplify() override;
 };
